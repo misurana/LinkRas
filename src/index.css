@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-900: #0f1115;
+    --bg-800: #1b1d24;
+    --bg-700: #262933;
+    --text-primary: #f3f4f6;
+    --text-secondary: #a1a1aa;
+    --text-title: #ffffff;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --glass-bg: rgba(27, 29, 36, 0.6);
+  }
+
+  [data-theme='light'] {
+    --bg-900: #f8fafc;
+    --bg-800: #ffffff;
+    --bg-700: #f1f5f9;
+    --text-primary: #334155;
+    --text-secondary: #64748b;
+    --text-title: #0f172a;
+    --border-color: rgba(0, 0, 0, 0.08);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+  }
+
+  body {
+    @apply antialiased transition-colors duration-300;
+    background-color: var(--bg-900);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Global light mode text overrides */
+  [data-theme='light'] h1, 
+  [data-theme='light'] h2, 
+  [data-theme='light'] h3, 
+  [data-theme='light'] h4,
+  [data-theme='light'] .text-white,
+  [data-theme='light'] .text-gray-100 {
+    color: var(--text-title) !important;
+  }
+
+  [data-theme='light'] p,
+  [data-theme='light'] label,
+  [data-theme='light'] span:not(.text-white),
+  [data-theme='light'] .text-gray-300,
+  [data-theme='light'] .text-gray-400 {
+    color: var(--text-secondary) !important;
+  }
+
+  /* Ensure buttons keep their white text regardless of theme */
+  [data-theme='light'] button.text-white,
+  [data-theme='light'] .bg-primary-600 .text-white,
+  [data-theme='light'] .bg-primary-500 .text-white,
+  [data-theme='light'] button .text-white,
+  [data-theme='light'] .bg-primary-600,
+  [data-theme='light'] .bg-primary-500,
+  [data-theme='light'] .bg-emerald-400,
+  [data-theme='light'] .bg-red-500 {
+    color: white !important;
+  }
+  
+  /* Book Spine and effect overrides for light mode */
+  [data-theme='light'] .demoPage {
+    background-color: #ffffff;
+    border-color: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  [data-theme='light'] .demoPage > div[style*="from-black"] {
+    background-image: linear-gradient(to left, rgba(0,0,0,0.1), transparent) !important;
+  }
+  
+  [data-theme='light'] .demoPage > div[style*="from-black/60"] {
+    background-image: linear-gradient(to right, rgba(0,0,0,0.1), transparent) !important;
+  }
+
+  /* Specific fix for CustomerMenu backdrop markers */
+  [data-theme='light'] .perspective-1000 {
+    background-color: #f1f5f9;
+  }
+
+  [data-theme='light'] .demoPage div.text-gray-600 {
+    color: var(--text-secondary) !important;
+  }
+
+  /* Final touch for inputs in light mode settings */
+  [data-theme='light'] input[type="text"],
+  [data-theme='light'] input[type="password"],
+  [data-theme='light'] input[type="email"],
+  [data-theme='light'] select {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    color: var(--text-title) !important;
+  }
+  
+  [data-theme='light'] input::placeholder {
+    color: #94a3b8;
+  }
+
+  /* Handle common translucent utility classes in light mode */
+  [data-theme='light'] .bg-black\/20,
+  [data-theme='light'] .bg-white\/5,
+  [data-theme='light'] .bg-white\/10 {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  [data-theme='light'] .bg-primary-500\/20 {
+    background-color: rgba(124, 58, 237, 0.1) !important;
+  }
+
+  [data-theme='light'] .bg-red-500\/10 {
+    background-color: rgba(239, 68, 68, 0.1) !important;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    @apply shadow-xl transition-all duration-300;
+  }
+}
+
