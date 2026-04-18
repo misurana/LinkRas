@@ -45,9 +45,10 @@ export default function MenuChatbot({ menu = [], restaurantName = "" }) {
       }]);
     } catch (error) {
       console.error("Chatbot Error:", error);
+      const keyPrefix = import.meta.env.VITE_GEMINI_API_KEY ? import.meta.env.VITE_GEMINI_API_KEY.substring(0, 8) : 'MISSING';
       setMessages(prev => [...prev, { 
         type: 'bot', 
-        text: "I'm having a bit of trouble connecting to my brain. Please check the menu for now!", 
+        text: `Error: ${error.message}. Key starts with: ${keyPrefix}. Please ensure the Generative Language API is enabled in your Google AI Studio.`, 
         dishes: [] 
       }]);
     } finally {
