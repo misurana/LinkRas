@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, MessageSquare, Utensils, Sparkles } from 'lucide-react';
+import { getAIResponse } from '../utils/aiService';
 
 export default function MenuChatbot({ menu = [], restaurantName = "" }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,84 +28,33 @@ export default function MenuChatbot({ menu = [], restaurantName = "" }) {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate AI thinking
-    setTimeout(() => {
-      processQuery(userMessage);
-    }, 1000);
-  };
+    try {
+      // Step 1: Get intelligent response from Gemini
+      const aiText = await getAIResponse(userMessage, menu, restaurantName);
+      
+      // Step 2: Intelligent Dish Detection
+      // We look for dish names mentioned in the AI response to show cards
+      const mentionedDishes = menu.filter(dish => 
+        aiText.toLowerCase().includes(dish.name.toLowerCase())
+      ).slice(0, 3); // Max 3 cards to keep it tidy
 
-  const getLevenshteinDistance = (a, b) => {
-    const matrix = [];
-    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
-    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-
-    for (let i = 1; i <= b.length; i++) {
-      for (let j = 1; j <= a.length; j++) {
-        if (b.charAt(i - 1) === a.charAt(j - 1)) {
-          matrix[i][j] = matrix[i - 1][j - 1];
-        } else {
-          matrix[i][j] = Math.min(
-            matrix[i - 1][j - 1] + 1,
-            matrix[i][j - 1] + 1,
-            matrix[i - 1][j] + 1
-          );
-        }
-      }
+      setMessages(prev => [...prev, { 
+        type: 'bot', 
+        text: aiText, 
+        dishes: mentionedDishes
+      }]);
+    } catch (error) {
+      console.error("Chatbot Error:", error);
+      setMessages(prev => [...prev, { 
+        type: 'bot', 
+        text: "I'm having a bit of trouble connecting to my brain. Please check the menu for now!", 
+        dishes: [] 
+      }]);
+    } finally {
+      setIsTyping(false);
     }
-    return matrix[b.length][a.length];
   };
 
-  const processQuery = (query) => {
-    const stopWords = ['only', 'show', 'items', 'item', 'with', 'for', 'want', 'please', 'can', 'you', 'give', 'me', 'the', 'what', 'are'];
-    const qRaw = query.toLowerCase().trim();
-    
-    // Remove stop words to find significant keywords
-    const qWords = qRaw.split(/\s+/).filter(w => w.length > 1);
-    const significantWords = qWords.filter(w => !stopWords.includes(w));
-    
-    // If we removed everything, fall back to the raw query
-    const searchWords = significantWords.length > 0 ? significantWords : qWords;
-    
-    const results = menu.filter(dish => {
-      const targetFields = [
-        dish.name.toLowerCase(),
-        dish.category.toLowerCase(),
-        ...(dish.description ? [dish.description.toLowerCase()] : [])
-      ];
-
-      // 1. Check if ANY significant keyword matches exactly or partially
-      const hasDirectMatch = searchWords.some(sWord => 
-        targetFields.some(field => field.includes(sWord))
-      );
-      if (hasDirectMatch) return true;
-
-      // 2. Fuzzy match significant words (Levenstein Distance)
-      return searchWords.some(sWord => {
-        return targetFields.some(field => {
-          const fieldWords = field.split(/\s+/);
-          return fieldWords.some(fWord => {
-            const distance = getLevenshteinDistance(sWord, fWord);
-            const threshold = sWord.length > 5 ? 2 : 1;
-            return distance <= threshold;
-          });
-        });
-      });
-    });
-
-    let responseText = "";
-    if (results.length > 0) {
-      responseText = `I found ${results.length} dish(es) that seem to match your request. Here they are:`;
-    } else {
-      responseText = `Please Visit the Menu For Clarification`;
-    }
-
-    setMessages(prev => [...prev, { 
-      type: 'bot', 
-      text: responseText, 
-      dishes: results.slice(0, 5) 
-    }]);
-    setIsTyping(false);
-  };
 
   return (
     <div className="fixed bottom-6 right-6 z-[100] font-sans">
