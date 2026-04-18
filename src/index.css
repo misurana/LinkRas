@@ -6,14 +6,15 @@
 
 @layer base {
   :root {
-    --bg-900: #0f1115;
-    --bg-800: #1b1d24;
-    --bg-700: #262933;
-    --text-primary: #f3f4f6;
-    --text-secondary: #a1a1aa;
+    --bg-900: #0a0a0b;
+    --bg-800: #121214;
+    --bg-700: #1a1a1e;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
     --text-title: #ffffff;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --glass-bg: rgba(27, 29, 36, 0.6);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(18, 18, 20, 0.7);
+    --primary-glow: rgba(124, 58, 237, 0.15);
   }
 
   [data-theme='light'] {
@@ -119,10 +120,13 @@
 
 @layer components {
   .glass-panel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
     background-color: var(--glass-bg);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid var(--border-color);
-    @apply shadow-xl transition-all duration-300;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    @apply transition-all duration-300;
   }
 }
 
