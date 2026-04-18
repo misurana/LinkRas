@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const genAI = API_KEY ? new GoogleGenerativeAI(API_KEY) : null;
+const API_KEY = "AIzaSyCNCA3xnYybndrqKj6aQCYBTBiFByK4wJ8";
+const genAI = new GoogleGenerativeAI(API_KEY);
 
 /**
  * Clean up the menu data to save tokens and avoid confusing the AI
