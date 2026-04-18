@@ -47,7 +47,7 @@ export default function MenuChatbot({ menu = [], restaurantName = "" }) {
       console.error("Chatbot Error:", error);
       setMessages(prev => [...prev, { 
         type: 'bot', 
-        text: `I'm having trouble connecting to my brain. Error: ${error.message?.substring(0, 100) || 'Unknown Error'}`, 
+        text: "I'm having a bit of trouble connecting to my brain. Please check the menu for now!", 
         dishes: [] 
       }]);
     } finally {

@@ -34,7 +34,7 @@ export const getAIResponse = async (userQuery, menu, restaurantName) => {
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
     const context = prepareMenuContext(menu, restaurantName);
 
     const prompt = `${context}\n\nCustomer Question: "${userQuery}"\nAssistant Response:`;
