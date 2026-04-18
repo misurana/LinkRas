@@ -12,13 +12,12 @@ ${menuContext}
 CUSTOMER: "${userQuery}"
 WAITER:`;
 
-  // Try 1.5 Flash first (Smartest), then fallback to Pro if Google rejects the model ID
-  const models = ["gemini-1.5-flash", "gemini-pro", "gemini-1.5-pro"];
+  // Your account specifically supports Gemini 2.0 and 2.5
+  const models = ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-2.0-flash-lite"];
   
   for (const modelId of models) {
     try {
-      console.log(`Trying model: ${modelId}...`);
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${API_KEY}`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/${modelId}:generateContent?key=${API_KEY}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -28,13 +27,9 @@ WAITER:`;
 
       const data = await response.json();
       
-      if (data.error) {
-        console.warn(`Model ${modelId} failed:`, data.error.message);
-        continue; // Try next model
-      }
+      if (data.error) continue;
 
       if (data.candidates && data.candidates[0].content.parts[0].text) {
-        console.log(`Success with ${modelId}`);
         return data.candidates[0].content.parts[0].text;
       }
     } catch (err) {
