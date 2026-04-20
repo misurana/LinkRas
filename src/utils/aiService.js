@@ -1,6 +1,6 @@
 
 export async function getAIResponse(userQuery, menu, restaurantName) {
-  const API_KEY = "AIzaSyCNCA3xnYybndrqKj6aQCYBTBiFByK4wJ8";
+  const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
   
   if (!menu || menu.length === 0) {
     return "I see the menu is currently being updated! Is there something specific I can help you find?";
@@ -28,7 +28,6 @@ WAITER:`;
     const data = await response.json();
     
     if (data.error) {
-       // If it's a 429, we tell the user to wait
        if (data.error.code === 429) {
          return "I'm a bit overwhelmed with orders! Please give me a few seconds to catch my breath and ask again.";
        }
